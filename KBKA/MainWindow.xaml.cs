@@ -31,6 +31,8 @@ namespace KBKA
     /// </summary>
     public partial class MainWindow : Window
     {
+        public string userName = null;
+
         // client configuration
         const string clientID = "894692614544-22gu7nau3ledrn8km38t27sbn957n06e.apps.googleusercontent.com";
         const string clientSecret = "BYsABFPcHy_uiT9DWUwa0LqZ";
@@ -63,12 +65,12 @@ namespace KBKA
 
             // Creates a redirect URI using an available port on the loopback address.
             string redirectURI = string.Format("http://{0}:{1}/", IPAddress.Loopback, GetRandomUnusedPort());
-            output("redirect URI: " + redirectURI);
+            //output("redirect URI: " + redirectURI);
 
             // Creates an HttpListener to listen for requests on that redirect URI.
             var http = new HttpListener();
             http.Prefixes.Add(redirectURI);
-            output("Listening..");
+            //output("Listening..");
             http.Start();
 
             // Creates the OAuth 2.0 authorization request.
@@ -126,7 +128,7 @@ namespace KBKA
                 output(String.Format("Received request with invalid state ({0})", incoming_state));
                 return;
             }
-            output("Authorization code: " + code);
+            //output("Authorization code: " + code);
 
             // Starts the code exchange at the Token Endpoint.
             performCodeExchange(code, code_verifier, redirectURI);
@@ -134,7 +136,7 @@ namespace KBKA
 
         async void performCodeExchange(string code, string code_verifier, string redirectURI)
         {
-            output("Exchanging code for tokens...");
+            //output("Exchanging code for tokens...");
 
             // builds the  request
             string tokenRequestURI = "https://www.googleapis.com/oauth2/v4/token";
@@ -165,7 +167,7 @@ namespace KBKA
                 {
                     // reads response body
                     string responseText = await reader.ReadToEndAsync();
-                    output(responseText);
+                    //output(responseText);
 
                     // converts to dictionary
                     Dictionary<string, string> tokenEndpointDecoded = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseText);
@@ -181,7 +183,7 @@ namespace KBKA
                     var response = ex.Response as HttpWebResponse;
                     if (response != null)
                     {
-                        output("HTTP: " + response.StatusCode);
+                        //output("HTTP: " + response.StatusCode);
                         using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                         {
                             // reads response body
@@ -197,7 +199,7 @@ namespace KBKA
 
         async void userinfoCall(string access_token)
         {
-            output("Making API Call to Userinfo...");
+            //output("Making API Call to Userinfo...");
 
             // builds the  request
             string userinfoRequestURI = "https://www.googleapis.com/oauth2/v3/userinfo";
@@ -215,7 +217,30 @@ namespace KBKA
             {
                 // reads response body
                 string userinfoResponseText = await userinfoResponseReader.ReadToEndAsync();
-                output(userinfoResponseText);
+
+                char[] delimiterChars = { '"' };
+
+                string[] words = userinfoResponseText.Split(delimiterChars);
+
+
+                int i = 0;
+                foreach (var word in words)
+                {
+
+                    i++;
+                    if (i == 12)
+                    {
+                        userName = word;
+                        Witaj.Visibility = Visibility.Visible;
+                        Witaj.Content = "Witaj " + userName;
+                        LogIn.Visibility = Visibility.Collapsed;
+                        // LogOut.Visibility = Visibility.Visible;
+                    }
+
+                }
+                //textBoxOutput.Text = textBoxOutput.Text + userName;
+                // output(userinfoResponseText);
+
             }
         }
 
@@ -227,6 +252,7 @@ namespace KBKA
         {
             textBoxOutput.Text = textBoxOutput.Text + output + Environment.NewLine;
             Console.WriteLine(output);
+
         }
 
         /// <summary>
