@@ -20,14 +20,27 @@ limitations under the License.
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KBKA"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Button x:Name="button" Content="Zaloguj do Google" HorizontalAlignment="Left" Margin="18,22,0,0" VerticalAlignment="Top" Width="206" Height="46" Click="button_Click"
-                BorderThickness="0" Padding="0" Background="Transparent">
-           
-        </Button>
-        <TextBox x:Name="textBoxOutput" HorizontalAlignment="Left" Height="209" Margin="22,89,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="470"
-         IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto"
-         />
+     Title="MainWindow" Height="720" Width="1200">
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" RenderTransformOrigin="0.55,0.457" Height="700">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.7*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <Label Content="Witaj XYZ" HorizontalAlignment="Left" Margin="62,36,0,0" VerticalAlignment="Top" Height="35" Width="200" FontSize="25" FontFamily="Berlin Sans FB" FontWeight="Normal"/>
+        <Calendar HorizontalAlignment="Center" Margin="0,97,0,0" VerticalAlignment="Top" Height="170" Width="215"/>
+        <Label Content="Wydarzenia" HorizontalAlignment="Center" Margin="0,297,0,0" VerticalAlignment="Top" Width="200" Height="35" FontSize="20" FontFamily="Berlin Sans FB"/>
+        <TextBox x:Name="textBoxOutput" HorizontalAlignment="Center" Margin="0,332,0,0" Text="a tu będą wydarzenia pobrane z  google callendar na dany dzień"  IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Height="288"/>
+        <Button Name="LogIn" Content="Zaloguj się" HorizontalAlignment="Center" Margin="0,638,0,0" VerticalAlignment="Top" Height="35" Width="200" RenderTransformOrigin="0.255,0.528" Click="button_Click"/>
+        <Label Content="Dzisiaj jest" Grid.Column="1" HorizontalAlignment="Left" Height="35" Margin="50,36,0,0" VerticalAlignment="Top" Width="250" FontFamily="Berlin Sans FB" FontSize="25"/>
+        <Label Content="TO DO" Grid.Column="1" HorizontalAlignment="Left" Margin="50,100,0,0" VerticalAlignment="Top" Width="250" Height="35" FontSize="20" FontFamily="Berlin Sans FB" FontWeight="Bold"/>
+        <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="35,140,0,0" Text="things to DO na te textboxy będą połaczone z baza danych - nasza- przechowywujaca te tablice kanban" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Height="520" FontSize="20" FontFamily="Bradley Hand ITC" FontWeight="Bold"/>
+        <Label Content="IN PROGRESS" Grid.Column="1" HorizontalAlignment="Center" Margin="0,100,0,0" VerticalAlignment="Top" Width="250" Height="35" FontSize="20" FontFamily="Berlin Sans FB" FontWeight="Bold"/>
+        <TextBox Grid.Column="2" HorizontalAlignment="Center" Margin="0,140,0,0" Text="things U RE dooooIN'" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Height="520" FontSize="20" FontFamily="Bradley Hand ITC" FontWeight="Bold"/>
+        <Label Content="DONE" Grid.Column="1" HorizontalAlignment="Right" Margin="0,100,35,0" VerticalAlignment="Top" Width="250" Height="35" FontSize="20" FontFamily="Berlin Sans FB" FontWeight="Bold"/>
+        <TextBox Grid.Column="3" HorizontalAlignment="Right" Margin="0,140,35,0" Text="things U HAVE DONE" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Height="520" FontSize="20" FontFamily="Bradley Hand ITC" FontWeight="Bold"/>
+
+ 
+       
     </Grid>
 </Window>
