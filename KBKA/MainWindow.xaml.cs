@@ -25,6 +25,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using Google.Apis.Drive.v3;
+using Google.Apis.Drive.v3.Data;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Util.Store;
+using File = Google.Apis.Drive.v3.Data.File;
+using Google.Apis.Services;
 
 namespace KBKA
 {
@@ -38,10 +44,18 @@ namespace KBKA
         // client configuration
         const string clientID = "894692614544-22gu7nau3ledrn8km38t27sbn957n06e.apps.googleusercontent.com";
         const string clientSecret = "BYsABFPcHy_uiT9DWUwa0LqZ";
+        //scoopes
         const string authorizationEndpoint = "https://accounts.google.com/o/oauth2/v2/auth";
         const string tokenEndpoint = "https://www.googleapis.com/oauth2/v4/token";
         const string userInfoEndpoint = "https://www.googleapis.com/oauth2/v3/userinfo";
         const string appDataEndpoint = "https://www.googleapis.com/auth/drive.appdata";
+        const string callendarEventsEndpoint = "https://www.googleapis.com/auth/calendar.events.readonly";
+        const string authDriveFile = "https://www.googleapis.com/auth/drive.file";
+        //App Files variables
+        private static string fileName = "LogoKBKA"; // name of uploaded file
+       // private static string folderID = ""; // where to upload
+        private static string filePath = @"C:\Users\Ewa\Desktop\Logo.png"; // where is the file to upload
+        private static string fileContentType = "photo"; // what is the type of file
 
         public MainWindow()
         {
@@ -135,6 +149,8 @@ namespace KBKA
 
             // Starts the code exchange at the Token Endpoint.
             performCodeExchange(code, code_verifier, redirectURI);
+
+        
         }
 
         async void performCodeExchange(string code, string code_verifier, string redirectURI)
@@ -253,7 +269,33 @@ namespace KBKA
                 // output(userinfoResponseText);
 
             }
-        }
+
+            string[] scopes = new string[] { DriveService.Scope.Drive,
+                             DriveService.Scope.DriveFile};
+
+            UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                new ClientSecrets { ClientId = clientID, ClientSecret = clientSecret },
+                 scopes,
+                 Environment.UserName,
+                 CancellationToken.None,
+                 new FileDataStore("MyAppsToken")).Result;
+
+            var service = new DriveService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = "KBKA"
+            });
+            //var storageService = new s(new BaseClientService.Initializer()
+            //{
+            //    HttpClientInitializer = credential,
+            //    ApplicationName = "APP_NAME_HERE"
+            //});
+
+            UploadFileToGDrive(service, fileName, filePath, fileContentType);
+
+            ListFileGDrive(service);
+
+            }
 
         /// <summary>
         /// Appends the given string to the on-screen log, and the debug console.
@@ -328,7 +370,47 @@ namespace KBKA
                 chosendate.Content = date.ToShortDateString();
             }
         }
-         
+
+
+
+        /// <summary>
+        /// uploading AppFiles to Google Drive
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="fileName"></param>
+        /// <param name="filePath"></param>
+        /// <param name="contentType"></param>
+        /// <returns></returns>
+       private static void UploadFileToGDrive(DriveService service, string fileName, string filePath, string contentType)
+        {
+            var fileMetadata = new Google.Apis.Drive.v3.Data.File();
+            fileMetadata.Name = fileName;
+            fileMetadata.Parents = new List<string>() { "appDataFolder" };
+
+            FilesResource.CreateMediaUpload request;
+
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                request = service.Files.Create(fileMetadata, stream, contentType);
+                request.Upload();
+            }
+            var file = request.ResponseBody; ;
+           
+        }
+        private static void ListFileGDrive(DriveService service)
+        {
+            var request = service.Files.List();
+            request.Spaces = "appDataFolder";
+            request.Fields = "nextPageToken, files(id, name)";
+            request.PageSize = 10;
+            var result = request.Execute();
+            foreach (var file in result.Files)
+            {
+                Console.WriteLine(String.Format(
+                    "Found file: {0} ({1})", file.Name, file.Id));
+            }
+        }
+
 
 
     }

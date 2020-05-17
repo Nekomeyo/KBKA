@@ -20,7 +20,7 @@ limitations under the License.
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KBKA"
         mc:Ignorable="d"
-     Title="MainWindow" Height="720" Width="1200" WindowStartupLocation="CenterScreen" Icon="Logo.png">
+     Title="KBKA" Height="720" Width="1200" WindowStartupLocation="CenterScreen" Icon="Logo.png">
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" RenderTransformOrigin="0.55,0.457" Height="700">
 
         <Grid.ColumnDefinitions>
@@ -31,10 +31,10 @@ limitations under the License.
         </Grid.ColumnDefinitions>
         
         <Label Name="Witaj" Content="" HorizontalAlignment="Left" Margin="62,36,0,0" VerticalAlignment="Top" Height="35" Width="200" FontSize="25" FontFamily="Berlin Sans FB" FontWeight="Normal"/>
-        <Image Name ="avatar" Grid.ColumnSpan="1" HorizontalAlignment="Left" Height="80" Margin="229,10,0,0" VerticalAlignment="Top" Width="80"  RenderTransformOrigin="0.5,0.5" Stretch="Uniform"/>
+        <Image Name ="avatar" Grid.ColumnSpan="1" HorizontalAlignment="Left" Height="80" Margin="218,10,0,0" VerticalAlignment="Top" Width="80"  RenderTransformOrigin="0.5,0.5" Stretch="Uniform"/>
         <Calendar SelectedDatesChanged="Calendar_SelectedDatesChanged" HorizontalAlignment="Center" Margin="47,97,47,0" VerticalAlignment="Top" Height="170" Width="215"/>
         <Label Content="Wydarzenia" HorizontalAlignment="Center" Margin="54,297,55,0" VerticalAlignment="Top" Width="200" Height="35" FontSize="20" FontFamily="Berlin Sans FB"/>
-        <TextBox x:Name="textBoxOutput" HorizontalAlignment="Center" Margin="55,330,55,0" Text="a tu będą wydarzenia pobrane z  google callendar na dany dzień"  IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Height="285" ScrollViewer.CanContentScroll="True"/>
+        <TextBox Name="textBoxOutput" HorizontalAlignment="Center" Margin="48,332,50,0" Text="  a tu będą wydarzenia pobrane z  google callendar na dany dzień"  IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Height="285" ScrollViewer.CanContentScroll="True"/>
         <Button Name="LogIn" Content="Zaloguj się" HorizontalAlignment="Center" Margin="54,637,55,0" VerticalAlignment="Top" Height="35" Width="200" RenderTransformOrigin="0.255,0.528" Click="button_Click"/>
         <!-- <Button Name="LogOut" Content="Wyloguj się" Visibility="Collapsed" HorizontalAlignment="Center" Margin="0,638,0,0" VerticalAlignment="Top" Height="35" Width="200" RenderTransformOrigin="0.255,0.528" Click="button_Click"/>
 -->
@@ -47,6 +47,7 @@ limitations under the License.
         
         <Label Content="DONE" Grid.Column="3" HorizontalAlignment="Right" Margin="0,100,48,0" VerticalAlignment="Top" Width="250" Height="35" FontSize="20" FontFamily="Berlin Sans FB" FontWeight="Bold"/>
         <TextBox Grid.Column="3" HorizontalAlignment="Right" Margin="20,140,30,0" Text="things U HAVE DONE" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Height="520" FontSize="20" FontFamily="Bradley Hand ITC" FontWeight="Bold"/>
+        <Label Content="Label" HorizontalAlignment="Left" Margin="280,-63,0,0" VerticalAlignment="Top"/>
 
 
 
