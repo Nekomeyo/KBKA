@@ -23,6 +23,8 @@ using System.Windows;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace KBKA
 {
@@ -39,6 +41,7 @@ namespace KBKA
         const string authorizationEndpoint = "https://accounts.google.com/o/oauth2/v2/auth";
         const string tokenEndpoint = "https://www.googleapis.com/oauth2/v4/token";
         const string userInfoEndpoint = "https://www.googleapis.com/oauth2/v3/userinfo";
+        const string appDataEndpoint = "https://www.googleapis.com/auth/drive.appdata";
 
         public MainWindow()
         {
@@ -221,7 +224,7 @@ namespace KBKA
                 char[] delimiterChars = { '"' };
 
                 string[] words = userinfoResponseText.Split(delimiterChars);
-
+              
 
                 int i = 0;
                 foreach (var word in words)
@@ -235,6 +238,14 @@ namespace KBKA
                         Witaj.Content = "Witaj " + userName;
                         LogIn.Visibility = Visibility.Collapsed;
                         // LogOut.Visibility = Visibility.Visible;
+                    }
+                    if (i == 20)
+                    {
+                        BitmapImage bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.UriSource = new Uri(word, UriKind.Absolute);
+                        bitmap.EndInit();
+                        avatar.Source = bitmap; 
                     }
 
                 }
@@ -297,6 +308,28 @@ namespace KBKA
 
             return base64;
         }
+
+        /// <summary>
+        /// Shows chosen date form calendar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Calendar_SelectedDatesChanged(object sender,
+           SelectionChangedEventArgs e)
+        {
+            // ... Get reference.
+            var calendar = sender as Calendar;
+
+            // ... See if a date is selected.
+            if (calendar.SelectedDate.HasValue)
+            {
+                // ... Display SelectedDate in Title.
+                DateTime date = calendar.SelectedDate.Value;
+                chosendate.Content = date.ToShortDateString();
+            }
+        }
+         
+
 
     }
 }
