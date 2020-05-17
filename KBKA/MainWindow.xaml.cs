@@ -93,7 +93,7 @@ namespace KBKA
 
             // Sends an HTTP response to the browser.
             var response = context.Response;
-            string responseString = string.Format("<html><head><meta http-equiv='refresh' content='10;url=https://google.com'></head><body>Please return to the app.</body></html>");
+            string responseString = string.Format("<html><head><meta http-equiv='refresh' content='10;url=https://google.com' charset='utf-8 '></head><body> <div style='text-align:center'>Pomyślnie zalogowano.<br> Powróć do aplikacji </div></body></html>");
             var buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
             response.ContentLength64 = buffer.Length;
             var responseOutput = response.OutputStream;
