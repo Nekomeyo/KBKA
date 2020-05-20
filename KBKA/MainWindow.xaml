@@ -36,8 +36,7 @@ limitations under the License.
         <Label Content="Wydarzenia" HorizontalAlignment="Center" Margin="54,297,55,0" VerticalAlignment="Top" Width="200" Height="35" FontSize="20" FontFamily="Berlin Sans FB"/>
         <TextBox Name="textBoxOutput" HorizontalAlignment="Center" Margin="48,332,50,0" Text="  a tu będą wydarzenia pobrane z  google callendar na dany dzień"  IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" Height="285" ScrollViewer.CanContentScroll="True"/>
         <Button Name="LogIn" Content="Zaloguj się" HorizontalAlignment="Center" Margin="54,637,55,0" VerticalAlignment="Top" Height="35" Width="200" RenderTransformOrigin="0.255,0.528" Click="button_Click"/>
-        <!-- <Button Name="LogOut" Content="Wyloguj się" Visibility="Collapsed" HorizontalAlignment="Center" Margin="0,638,0,0" VerticalAlignment="Top" Height="35" Width="200" RenderTransformOrigin="0.255,0.528" Click="button_Click"/>
--->
+        
         <Label Name="chosendate" Content="" Grid.Column="1" HorizontalAlignment="Left" Height="35" Margin="35,36,0,0" VerticalAlignment="Top" Width="250" FontFamily="Berlin Sans FB" FontSize="25"/>
         <Label Content="TO DO" Grid.Column="1" HorizontalAlignment="Left" Margin="20,100,0,0" VerticalAlignment="Top" Width="250" Height="35" FontSize="20" FontFamily="Berlin Sans FB" FontWeight="Bold"/>
         <TextBox Grid.Column="1" HorizontalAlignment="Left" Margin="20,140,30,0" Text="things to DO na te textboxy będą połaczone z baza danych - nasza- przechowywujaca te tablice kanban" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Height="520" FontSize="20" FontFamily="Bradley Hand ITC" FontWeight="Bold"/>

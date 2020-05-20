@@ -25,11 +25,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using Google.Apis.Drive.v3;
-using Google.Apis.Drive.v3.Data;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Util.Store;
-using File = Google.Apis.Drive.v3.Data.File;
 using Google.Apis.Services;
 
 namespace KBKA
@@ -44,18 +41,11 @@ namespace KBKA
         // client configuration
         const string clientID = "894692614544-22gu7nau3ledrn8km38t27sbn957n06e.apps.googleusercontent.com";
         const string clientSecret = "BYsABFPcHy_uiT9DWUwa0LqZ";
-        //scoopes
+        // scoopes
         const string authorizationEndpoint = "https://accounts.google.com/o/oauth2/v2/auth";
         const string tokenEndpoint = "https://www.googleapis.com/oauth2/v4/token";
         const string userInfoEndpoint = "https://www.googleapis.com/oauth2/v3/userinfo";
-        const string appDataEndpoint = "https://www.googleapis.com/auth/drive.appdata";
-        const string callendarEventsEndpoint = "https://www.googleapis.com/auth/calendar.events.readonly";
-        const string authDriveFile = "https://www.googleapis.com/auth/drive.file";
-        //App Files variables
-        private static string fileName = "LogoKBKA"; // name of uploaded file
-       // private static string folderID = ""; // where to upload
-        private static string filePath = @"C:\Users\Ewa\Desktop\Logo.png"; // where is the file to upload
-        private static string fileContentType = "photo"; // what is the type of file
+        
 
         public MainWindow()
         {
@@ -74,7 +64,7 @@ namespace KBKA
 
         private async void button_Click(object sender, RoutedEventArgs e)
         {
-            // Generates state and PKCE values.
+            // Generates state and Proof Key for Code Exchange values.
             string state = randomDataBase64url(32);
             string code_verifier = randomDataBase64url(32);
             string code_challenge = base64urlencodeNoPadding(sha256(code_verifier));
@@ -158,7 +148,6 @@ namespace KBKA
             //output("Exchanging code for tokens...");
 
             // builds the  request
-            string tokenRequestURI = "https://www.googleapis.com/oauth2/v4/token";
             string tokenRequestBody = string.Format("code={0}&redirect_uri={1}&client_id={2}&code_verifier={3}&client_secret={4}&scope=&grant_type=authorization_code",
                 code,
                 System.Uri.EscapeDataString(redirectURI),
@@ -168,7 +157,7 @@ namespace KBKA
                 );
 
             // sends the request
-            HttpWebRequest tokenRequest = (HttpWebRequest)WebRequest.Create(tokenRequestURI);
+            HttpWebRequest tokenRequest = (HttpWebRequest)WebRequest.Create(tokenEndpoint);
             tokenRequest.Method = "POST";
             tokenRequest.ContentType = "application/x-www-form-urlencoded";
             tokenRequest.Accept = "Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
@@ -207,7 +196,7 @@ namespace KBKA
                         {
                             // reads response body
                             string responseText = await reader.ReadToEndAsync();
-                            output(responseText);
+                          
                         }
                     }
 
@@ -217,14 +206,9 @@ namespace KBKA
 
 
         async void userinfoCall(string access_token)
-        {
-            //output("Making API Call to Userinfo...");
-
-            // builds the  request
-            string userinfoRequestURI = "https://www.googleapis.com/oauth2/v3/userinfo";
-
+        {   
             // sends the request
-            HttpWebRequest userinfoRequest = (HttpWebRequest)WebRequest.Create(userinfoRequestURI);
+            HttpWebRequest userinfoRequest = (HttpWebRequest)WebRequest.Create(userInfoEndpoint);
             userinfoRequest.Method = "GET";
             userinfoRequest.Headers.Add(string.Format("Authorization: Bearer {0}", access_token));
             userinfoRequest.ContentType = "application/x-www-form-urlencoded";
@@ -240,8 +224,8 @@ namespace KBKA
                 char[] delimiterChars = { '"' };
 
                 string[] words = userinfoResponseText.Split(delimiterChars);
-              
 
+                // gets needed informations
                 int i = 0;
                 foreach (var word in words)
                 {
@@ -253,7 +237,7 @@ namespace KBKA
                         Witaj.Visibility = Visibility.Visible;
                         Witaj.Content = "Witaj " + userName;
                         LogIn.Visibility = Visibility.Collapsed;
-                        // LogOut.Visibility = Visibility.Visible;
+                     
                     }
                     if (i == 20)
                     {
@@ -261,41 +245,17 @@ namespace KBKA
                         bitmap.BeginInit();
                         bitmap.UriSource = new Uri(word, UriKind.Absolute);
                         bitmap.EndInit();
-                        avatar.Source = bitmap; 
+                        avatar.Source = bitmap;
                     }
 
                 }
-                //textBoxOutput.Text = textBoxOutput.Text + userName;
+                // textBoxOutput.Text = textBoxOutput.Text + userName;
                 // output(userinfoResponseText);
 
             }
 
-            string[] scopes = new string[] { DriveService.Scope.Drive,
-                             DriveService.Scope.DriveFile};
+        }
 
-            UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                new ClientSecrets { ClientId = clientID, ClientSecret = clientSecret },
-                 scopes,
-                 Environment.UserName,
-                 CancellationToken.None,
-                 new FileDataStore("MyAppsToken")).Result;
-
-            var service = new DriveService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "KBKA"
-            });
-            //var storageService = new s(new BaseClientService.Initializer()
-            //{
-            //    HttpClientInitializer = credential,
-            //    ApplicationName = "APP_NAME_HERE"
-            //});
-
-            UploadFileToGDrive(service, fileName, filePath, fileContentType);
-
-            ListFileGDrive(service);
-
-            }
 
         /// <summary>
         /// Appends the given string to the on-screen log, and the debug console.
@@ -352,7 +312,7 @@ namespace KBKA
         }
 
         /// <summary>
-        /// Shows chosen date form calendar
+        /// Shows chosen date form calendar in chosendate label
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -372,44 +332,6 @@ namespace KBKA
         }
 
 
-
-        /// <summary>
-        /// uploading AppFiles to Google Drive
-        /// </summary>
-        /// <param name="service"></param>
-        /// <param name="fileName"></param>
-        /// <param name="filePath"></param>
-        /// <param name="contentType"></param>
-        /// <returns></returns>
-       private static void UploadFileToGDrive(DriveService service, string fileName, string filePath, string contentType)
-        {
-            var fileMetadata = new Google.Apis.Drive.v3.Data.File();
-            fileMetadata.Name = fileName;
-            fileMetadata.Parents = new List<string>() { "appDataFolder" };
-
-            FilesResource.CreateMediaUpload request;
-
-            using (var stream = new FileStream(filePath, FileMode.Open))
-            {
-                request = service.Files.Create(fileMetadata, stream, contentType);
-                request.Upload();
-            }
-            var file = request.ResponseBody; ;
-           
-        }
-        private static void ListFileGDrive(DriveService service)
-        {
-            var request = service.Files.List();
-            request.Spaces = "appDataFolder";
-            request.Fields = "nextPageToken, files(id, name)";
-            request.PageSize = 10;
-            var result = request.Execute();
-            foreach (var file in result.Files)
-            {
-                Console.WriteLine(String.Format(
-                    "Found file: {0} ({1})", file.Name, file.Id));
-            }
-        }
 
 
 
