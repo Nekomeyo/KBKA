@@ -28,6 +28,7 @@ using System.Windows.Media.Imaging;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Util.Store;
 using Google.Apis.Services;
+using Newtonsoft.Json.Linq;
 
 namespace KBKA
 {
@@ -37,6 +38,7 @@ namespace KBKA
     public partial class MainWindow : Window
     {
         public string userName = null;
+        public string userSub = null;
 
         // client configuration
         const string clientID = "894692614544-22gu7nau3ledrn8km38t27sbn957n06e.apps.googleusercontent.com";
@@ -50,7 +52,14 @@ namespace KBKA
         public MainWindow()
         {
             InitializeComponent();
+            // TexboxToDo.Text= SQLiteDA.ReadData("todo");
+            //Todo.ItemsSource = SQLiteDA.LoadData("todo");
+            Todo.ItemsSource = SQLiteDA.GetData("todo").DefaultView;
+            textBoxOutput.DisplayMemberPath = "event";
+            //output(DateTime.Now.ToShortDateString());
+
         }
+
 
         // ref http://stackoverflow.com/a/3978040
         public static int GetRandomUnusedPort()
@@ -62,7 +71,7 @@ namespace KBKA
             return port;
         }
 
-        private async void button_Click(object sender, RoutedEventArgs e)
+        private async void LogInbutton_Click(object sender, RoutedEventArgs e)
         {
             // Generates state and Proof Key for Code Exchange values.
             string state = randomDataBase64url(32);
@@ -224,13 +233,19 @@ namespace KBKA
                 char[] delimiterChars = { '"' };
 
                 string[] words = userinfoResponseText.Split(delimiterChars);
-
+              
                 // gets needed informations
                 int i = 0;
                 foreach (var word in words)
                 {
 
                     i++;
+                    if (i == 4)
+                    {
+                        userSub = word;
+                        output(userSub);
+
+                    }
                     if (i == 12)
                     {
                         userName = word;
@@ -263,7 +278,7 @@ namespace KBKA
         /// <param name="output">string to be appended</param>
         public void output(string output)
         {
-            textBoxOutput.Text = textBoxOutput.Text + output + Environment.NewLine;
+           // textBoxOutput.Text = textBoxOutput.Text + output + Environment.NewLine;
             Console.WriteLine(output);
 
         }
@@ -328,12 +343,15 @@ namespace KBKA
                 // ... Display SelectedDate in Title.
                 DateTime date = calendar.SelectedDate.Value;
                 chosendate.Content = date.ToShortDateString();
+               
             }
+           
+           
         }
 
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
 
-
-
-
+        }
     }
 }
