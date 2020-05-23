@@ -29,6 +29,9 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Util.Store;
 using Google.Apis.Services;
 using Newtonsoft.Json.Linq;
+using System.Linq;
+using System.Data;
+
 
 namespace KBKA
 {
@@ -39,6 +42,7 @@ namespace KBKA
     {
         public string userName = null;
         public string userSub = null;
+        public string cellContent = null;
 
         // client configuration
         const string clientID = "894692614544-22gu7nau3ledrn8km38t27sbn957n06e.apps.googleusercontent.com";
@@ -52,11 +56,14 @@ namespace KBKA
         public MainWindow()
         {
             InitializeComponent();
-            // TexboxToDo.Text= SQLiteDA.ReadData("todo");
-            //Todo.ItemsSource = SQLiteDA.LoadData("todo");
-            Todo.ItemsSource = SQLiteDA.GetData("todo").DefaultView;
-            textBoxOutput.DisplayMemberPath = "event";
-            //output(DateTime.Now.ToShortDateString());
+           // TexboxToDo.Text= SQLiteDA.ReadData("todo");
+           //Todo.ItemsSource = SQLiteDA.LoadData("todo");
+           // string date = DateTime.Now.ToShortDateString();
+           // Todo.ItemsSource = SQLiteDA.GetData(userSub+"td","todo",date).DefaultView;
+           //  textBoxOutput.DisplayMemberPath = "event";
+           // //output(DateTime.Now.ToShortDateString());
+            chosendate.Content = DateTime.Now.ToShortDateString();
+          
 
         }
 
@@ -250,7 +257,7 @@ namespace KBKA
                     {
                         userName = word;
                         Witaj.Visibility = Visibility.Visible;
-                        Witaj.Content = "Witaj " + userName;
+                        Witaj.Content = "Hello there, " + userName;
                         LogIn.Visibility = Visibility.Collapsed;
                      
                     }
@@ -264,6 +271,14 @@ namespace KBKA
                     }
 
                 }
+                //if (SQLiteDA.LookForTable(userSub+"td") == false)
+               // {
+                    SQLiteDA.CreateTables(userSub);
+               // }
+               
+                Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "todo", chosendate.Content.ToString()).DefaultView;
+                Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "inprogress", chosendate.Content.ToString()).DefaultView;
+                Done.ItemsSource = SQLiteDA.GetData(userSub + "d", "done", chosendate.Content.ToString()).DefaultView;
                 // textBoxOutput.Text = textBoxOutput.Text + userName;
                 // output(userinfoResponseText);
 
@@ -345,13 +360,83 @@ namespace KBKA
                 chosendate.Content = date.ToShortDateString();
                
             }
-           
-           
+
+            Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "todo", chosendate.Content.ToString()).DefaultView;
+            Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "inprogress", chosendate.Content.ToString()).DefaultView;
+            Done.ItemsSource = SQLiteDA.GetData(userSub + "d", "done", chosendate.Content.ToString()).DefaultView;
+
+
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void AddToDo_Click(object sender, RoutedEventArgs e)
         {
+            SQLiteDA.Add(userSub + "td", "todo", chosendate.Content.ToString(), TexBoxToDo.Text.ToString());
+            Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "todo", chosendate.Content.ToString()).DefaultView;
+        }
 
+        private void AddInProgress_Click(object sender, RoutedEventArgs e)
+        {
+            SQLiteDA.Add(userSub + "ip", "inprogress", chosendate.Content.ToString(), TextBoxInProgress.Text.ToString());
+            Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "inprogress", chosendate.Content.ToString()).DefaultView;
+        }
+
+        private void AddDone_Click(object sender, RoutedEventArgs e)
+        {
+            SQLiteDA.Add(userSub + "d", "done", chosendate.Content.ToString(), TextBoxDone.Text.ToString());
+            Done.ItemsSource = SQLiteDA.GetData(userSub + "d", "done", chosendate.Content.ToString()).DefaultView;
+        }
+
+        private void EditToDo_Click(object sender, RoutedEventArgs e)
+        {
+            SQLiteDA.Edit(userSub + "td", "todo", chosendate.Content.ToString(), TexBoxToDo.Text.ToString(),cellContent);
+            Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "todo", chosendate.Content.ToString()).DefaultView;
+        }
+
+        private void EditInProgress_Click(object sender, RoutedEventArgs e)
+        {
+            SQLiteDA.Edit(userSub + "ip", "inprogress", chosendate.Content.ToString(), TextBoxInProgress.Text.ToString(),cellContent);
+            Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "inprogress", chosendate.Content.ToString()).DefaultView;
+        }
+
+        private void EditDone_Click(object sender, RoutedEventArgs e)
+        {
+            SQLiteDA.Edit(userSub + "d", "done", chosendate.Content.ToString(), TextBoxDone.Text.ToString(),cellContent);
+            Done.ItemsSource = SQLiteDA.GetData(userSub + "d", "done", chosendate.Content.ToString()).DefaultView;
+        }
+
+        private void Todo_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            Todo.BeginEdit();
+           // DataGridCellInfo cell = Todo.SelectedCells[0];
+            //var content = cell.Column.GetCellContent(cell.Item);
+            //int helper = content.ToString().Length;
+            if (Todo.SelectedCells.Count == 1)
+            {
+                var selectedColumnHeader =
+                    Todo.Items.re
+                TextBoxDone.Text = selectedColumnHeader;
+            }
+
+            //if (helper >=33)
+            //{
+            //    // TextBoxDone.Text = content.ToString().Substring(33);
+
+            //    TextBoxDone.Text = e.AddedCells[0].IsValid
+
+            //    //TextBoxDone.Text = e.AddedCells[0].Item.ToString();
+            //    cellContent = content.ToString().Substring(33);
+            //}
+
+
+        }
+
+        private void DeleteToDo_Click(object sender, RoutedEventArgs e)
+        {
+            SQLiteDA.Delete(userSub + "td", "todo", chosendate.Content.ToString(),cellContent);
+            Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "todo", chosendate.Content.ToString()).DefaultView;
         }
     }
+
+        
+    
 }
