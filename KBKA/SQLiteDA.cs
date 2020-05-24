@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows;
 
 namespace KBKA
 {
@@ -20,7 +20,7 @@ namespace KBKA
         private static SQLiteDataAdapter DA;
         private static DataSet DS = new DataSet();
         private static DataTable DT = new DataTable();
-       
+
 
         //set connection and open the database
         public static SQLiteConnection OpenConnection()
@@ -32,7 +32,7 @@ namespace KBKA
             }
             catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message);
             }
             return sqlConn;
         }
@@ -45,89 +45,106 @@ namespace KBKA
             sqlCmd = sqlConn.CreateCommand();
             sqlCmd.CommandText = querryText;
             sqlCmd.ExecuteNonQuery();
-           // sqlConn.Close();
+            
         }
-        public static bool LookForTable(string table)
+      
+        // create user's tables if not exists
+        public static void CreateTables(string usersub)
         {
-            bool exists=false;
-            OpenConnection();
-
             try
             {
-              
-                sqlCmd = sqlConn.CreateCommand();
-                sqlCmd.CommandText = "select case when exists((select * from information_schema.tables where table_name = '" + table + "')) then 1 else 0 end";
-                
-                exists = (int)sqlCmd.ExecuteScalar() == 1;
-            }
-            catch
-            {
-            }
-           // sqlConn.Close();
-            return exists;
-        }
-        // create user's tables
-        public static void CreateTables (string usersub)
-        {
-            OpenConnection();
-            string createTodo = "CREATE TABLE IF NOT EXISTS " +'"'+ usersub + "td"+'"'+" (date TEXT NOT NULL, todo TEXT NOT NULL )";
-            string createInprogress = "CREATE TABLE IF NOT EXISTS " + '"' + usersub + "ip" + '"' + " (date TEXT NOT NULL, inprogress TEXT NOT NULL )";
-            string createDone = "CREATE TABLE IF NOT EXISTS " + '"' + usersub + "d" + '"' + "  (date TEXT NOT NULL, done TEXT NOT NULL )";
 
-            sqlCmd = sqlConn.CreateCommand();
-            sqlCmd.CommandText = createTodo;
-            sqlCmd.ExecuteNonQuery();
-            //sqlCmd = sqlConn.CreateCommand();
-            sqlCmd.CommandText = createInprogress;
-            sqlCmd.ExecuteNonQuery();
-            sqlCmd = sqlConn.CreateCommand();
-            sqlCmd.CommandText = createDone;
-            sqlCmd.ExecuteNonQuery();
-            //sqlConn.Close();
+                OpenConnection();
+                string createTodo = "CREATE TABLE IF NOT EXISTS " + '"' + usersub + "td" + '"' + " (" + '"' + "No" + '"' + " INTEGER NOT NULL PRIMARY KEY , Date TEXT NOT NULL, ToDo TEXT NOT NULL )";
+                string createInprogress = "CREATE TABLE IF NOT EXISTS " + '"' + usersub + "ip" + '"' + " (" + '"' + "No" + '"' + " INTEGER NOT NULL PRIMARY KEY , Date TEXT NOT NULL, InProgress TEXT NOT NULL )";
+                string createDone = "CREATE TABLE IF NOT EXISTS " + '"' + usersub + "d" + '"' + " (" + '"' + "No" + '"' + " INTEGER NOT NULL PRIMARY KEY ,  Date TEXT NOT NULL, Done TEXT NOT NULL )";
+
+                sqlCmd = sqlConn.CreateCommand();
+                sqlCmd.CommandText = createTodo;
+                sqlCmd.ExecuteNonQuery();
+               
+                sqlCmd.CommandText = createInprogress;
+                sqlCmd.ExecuteNonQuery();
+               
+                sqlCmd.CommandText = createDone;
+                sqlCmd.ExecuteNonQuery();
+                sqlConn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         //set function to show data in datagrids
 
         public static DataTable GetData(string table, string column, string date)
         {
-            OpenConnection();
-            sqlCmd = sqlConn.CreateCommand();
-            sqlCmd.CommandText = "select "+column+" from " +'"'+ table+'"'+ " where date = "+'"'+date+'"';
+            try
+            {
+                OpenConnection();
+                sqlCmd = sqlConn.CreateCommand();
+                sqlCmd.CommandText = "select " + '"' + "No" + '"' + ", " + column + " from " + '"' + table + '"' + " where Date = " + '"' + date + '"';
+             
             sqlCmd.ExecuteNonQuery();
 
-            DA = new SQLiteDataAdapter(sqlCmd);
-            DT = new DataTable();
-            DA.Fill(DT);
-           // sqlConn.Close();
+                DA = new SQLiteDataAdapter(sqlCmd);
+                DT = new DataTable();
+                DA.Fill(DT);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
             return DT;
         }
 
-        public static void Add (string table, string column, string date, string content)
+        public static void Add(string table, string column, string date, string tbContent, string noContent)
         {
-            OpenConnection();
-            string add = "insert into '" + table + "' (date,'" + column + "') values('" + date + "',"+'"' + content + '"'+')';
+            try {
+                OpenConnection();
+                string add = "insert into '" + table + "' (" + '"' + "No" + '"' + ", " + " Date, " + '"' + column + '"'+") values("+'"' + noContent + '"' + ", " + '"' + date +'"'+ ", " + '"' + tbContent +'"'+ ')';
+                
             sqlCmd = sqlConn.CreateCommand();
-            sqlCmd.CommandText = add;
-            sqlCmd.ExecuteNonQuery();
-        }
+                sqlCmd.CommandText = add;
+                sqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+               MessageBox.Show("Looks like something has gone wrong."+"\n"+"Be sure that entered data is correct");
+            }
+        } 
 
-        public static void Edit(string table, string column, string date, string tbcontent,string dgcontent)
+        public static void Edit(string table, string column, string date, string tbContent,string noContent)
         {
+            try {
             OpenConnection();
 
-            string edit = "update "+'"'+ table +'"' +" set " + column + '='+'"'+tbcontent+'"'+" where date= "+'"'+ date+'"'+" AND "+ column +'='+'"'+dgcontent+'"';
+            string edit = "update "+'"'+ table +'"' +" set " +'"'+ column +'"'+ "="+'"'+tbContent+'"'+ " Where ("+'"'+"No"+'"'+" = " + '"' + noContent + '"' + " AND "+'"'+"Date"+'"'+"= "+'"'+ date+'"'+ ")" ;
             Trace.WriteLine(edit);
             sqlCmd.CommandText = edit;
             sqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Looks like something has gone wrong." + "\n" + "Be sure that entered data is correct");
+            }
         }
-        public static void Delete(string table, string column, string date, string content)
+        public static void Delete(string table, string date, string noContent)
         {
+            try { 
             OpenConnection();
-            string edit = "delete '" + table + "' where date= " + '"' + date + '"'+"AND"+'"'+column+'='+'"'+content+'"';
-           // n AND sth
+            string edit = "delete from "+'"'+ table+'"' + " Where (" + '"' + "No" + '"' + " = " + '"' + noContent + '"' + " AND " + '"' + "Date" + '"' + "= " +'"'+ date+'"'+")";
+
             sqlCmd = sqlConn.CreateCommand();
             sqlCmd.CommandText = edit;
             sqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Looks like something has gone wrong." + "\n" + "Be sure that entered data is correct");
+            }
         }
 
     }

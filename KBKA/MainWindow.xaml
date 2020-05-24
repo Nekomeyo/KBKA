@@ -18,6 +18,7 @@ limitations under the License.
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:grid="http://schemas.microsoft.com/wpf/2008/toolkit"
         xmlns:local="clr-namespace:KBKA"
         mc:Ignorable="d"
      Title="KBKA" Height="720" Width="1200" WindowStartupLocation="CenterScreen" Icon="icon.png">
@@ -42,27 +43,37 @@ limitations under the License.
         </Button>
 
         <Label Name="chosendate" Content="" Grid.Column="1" HorizontalAlignment="Left" Height="35" Margin="20,36,0,0" VerticalAlignment="Top" Width="250" FontFamily="Berlin Sans FB" FontSize="25"/>
-        <Label Content="TO DO" Grid.Column="1" HorizontalAlignment="Left" Margin="20,100,0,0" VerticalAlignment="Top" Width="250" Height="35" FontSize="20" FontFamily="Berlin Sans FB" FontWeight="Bold"/>
-        <TextBox x:Name="TexBoxToDo" Grid.Column="1" HorizontalAlignment="Left" Margin="20,518,0,0" Text="baza danych- tabele poszeżyc o date w postaci string.&#xD;&#xA;dodać  w select odpowiednie columns .&#xD;&#xA;DODAC FUNKCJONALNOŚC ADD EDIT DELETE&#xD;&#xA;" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Height="99" FontSize="20" FontFamily="Bradley Hand ITC" FontWeight="Bold" />
-        <DataGrid x:Name="Todo" Grid.Column="1" HorizontalAlignment="Left" Height="289" Margin="20,160,0,0" VerticalAlignment="Top" Width="250" CanUserReorderColumns="False" MinColumnWidth="250"  SelectionUnit="Cell" SelectedCellsChanged="Todo_SelectedCellsChanged" />
+        <Label Content="TO DO" Grid.Column="1" HorizontalAlignment="Left" Margin="20,97,0,0" VerticalAlignment="Top" Width="250" Height="38" FontSize="22" FontFamily="Berlin Sans FB" FontWeight="Bold"/>
+        <TextBox x:Name="TexBoxToDo" Grid.Column="1" HorizontalAlignment="Left" Margin="20,518,0,0" Text="baza danych- tabele poszeżyc o date w postaci string.&#xD;&#xA;dodać  w select odpowiednie columns .&#xD;&#xA;DODAC FUNKCJONALNOŚC ADD EDIT DELEITE&#xD;&#xA;" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Height="99" FontSize="20" FontFamily="Bradley Hand ITC" FontWeight="Bold" />
+        <DataGrid x:Name="Todo" Grid.Column="1" HorizontalAlignment="Left" Height="289" Margin="20,160,0,0" VerticalAlignment="Top" Width="250" CanUserReorderColumns="False" MinColumnWidth="40"  SelectionUnit="Cell" GridLinesVisibility="Horizontal"   />
+        <Label Content="ToDo No." Grid.Column="1" HorizontalAlignment="Left" Margin="20,472,0,0" VerticalAlignment="Top" Height="24" Width="160" FontWeight="Bold" FontSize="14"/>
+        <TextBox x:Name="ToDoNo" HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" Grid.Column="1" Margin="200,472,0,0" PreviewTextInput="ToDoNo_PreviewTextInput"/>
+
         <Button x:Name="AddToDoo" Content="Add" Grid.Column="1" HorizontalAlignment="Left" Margin="20,637,0,0" VerticalAlignment="Top" Width="70" Height="35" Click="AddToDo_Click"/>
         <Button x:Name="EditToDo" Content="Edit" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Grid.Column="1" Margin="110,637,0,0" Height="35" Click="EditToDo_Click" />
         <Button x:Name="DeleteToDo" Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Grid.Column="1" Margin="200,637,0,0" Height="35" Click="DeleteToDo_Click"/>
 
-        <Label Content="IN PROGRESS" Grid.Column="2" HorizontalAlignment="Center" Margin="9,100,21,0" VerticalAlignment="Top" Width="250" Height="35" FontSize="20" FontFamily="Berlin Sans FB" FontWeight="Bold"/>
+        <Label Content="IN PROGRESS" Grid.Column="2" HorizontalAlignment="Center" Margin="18,97,30,0" VerticalAlignment="Top" Width="250" Height="38" FontSize="22" FontFamily="Berlin Sans FB" FontWeight="Bold"/>
         <TextBox x:Name="TextBoxInProgress" Grid.Column="2" HorizontalAlignment="Center" Margin="19,518,29,0" Text="things U RE dooooIN'" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Height="99" FontSize="20" FontFamily="Bradley Hand ITC" FontWeight="Bold"/>
         <DataGrid x:Name="Inprogress" Grid.Column="2" HorizontalAlignment="Left" Height="289" Margin="19,160,0,0" VerticalAlignment="Top" Width="250"/>
+        <Label Content="In Progress No." Grid.Column="2" HorizontalAlignment="Left" Margin="20,472,0,0" VerticalAlignment="Top" Height="24" Width="160" FontSize="14" FontWeight="Bold"/>
+        <TextBox x:Name="InProgressNo" HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" Grid.Column="2" Margin="198,472,0,0" PreviewTextInput="InProgressNo_PreviewTextInput"/>
+
         <Button  x:Name="AddInProgress" Content="Add" Grid.Column="2" HorizontalAlignment="Left" Margin="20,637,0,0" VerticalAlignment="Top" Width="70" Height="35" Click="AddInProgress_Click"/>
         <Button  x:Name="EditInProgress" Content="Edit" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Grid.Column="2" Margin="110,637,0,0" Height="35" Click="EditInProgress_Click"/>
-        <Button Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Grid.Column="2" Margin="200,637,0,0" Height="35"/>
+        <Button  x:Name="DeleteInProgress" Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Grid.Column="2" Margin="200,637,0,0" Height="35" Click="DeleteInProgress_Click" />
 
-        <Label Content="DONE" Grid.Column="3" HorizontalAlignment="Right" Margin="0,100,48,0" VerticalAlignment="Top" Width="250" Height="35" FontSize="20" FontFamily="Berlin Sans FB" FontWeight="Bold"/>
+
+        <Label Content="DONE" Grid.Column="3" HorizontalAlignment="Right" Margin="0,97,28,0" VerticalAlignment="Top" Width="250" Height="38" FontSize="22" FontFamily="Berlin Sans FB" FontWeight="Bold"/>
         <TextBox x:Name="TextBoxDone" Grid.Column="3" HorizontalAlignment="Right" Margin="0,518,30,0" Text="things U HAVE DONE" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Height="99" FontSize="20" FontFamily="Bradley Hand ITC" FontWeight="Bold"/>
         <Label Content="Label" HorizontalAlignment="Left" Margin="280,-63,0,0" VerticalAlignment="Top"/>
         <DataGrid x:Name="Done" Grid.Column="3" HorizontalAlignment="Left" Height="289" Margin="18,160,0,0" VerticalAlignment="Top" Width="250"/>
+        <TextBox x:Name="DoneNo" HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" VerticalAlignment="Top" Width="70" Grid.Column="3" Margin="200,472,0,0" PreviewTextInput="DoneNo_PreviewTextInput"/>
+        <Label Content="Done No." Grid.Column="3" HorizontalAlignment="Left" Margin="20,472,0,0" VerticalAlignment="Top" Height="24" Width="160" FontSize="14" FontWeight="Bold"/>
+
         <Button  x:Name="AddDone" Content="Add" Grid.Column="3" HorizontalAlignment="Left" Margin="20,637,0,0" VerticalAlignment="Top" Width="70" Height="35" Click="AddDone_Click"/>
         <Button  x:Name="EditDone" Content="Edit" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Grid.Column="3" Margin="110,637,0,0" Height="35" Click="EditDone_Click"/>
-        <Button Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Grid.Column="3" Margin="200,637,0,0" Height="35"/>
+        <Button x:Name="DeleteDone" Content="Delete" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Grid.Column="3" Margin="200,637,0,0" Height="35" Click="DeleteDone_Click"/>
 
 
 

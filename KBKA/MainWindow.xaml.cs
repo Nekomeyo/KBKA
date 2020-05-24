@@ -31,7 +31,7 @@ using Google.Apis.Services;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.Data;
-
+using System.Text.RegularExpressions;
 
 namespace KBKA
 {
@@ -42,7 +42,7 @@ namespace KBKA
     {
         public string userName = null;
         public string userSub = null;
-        public string cellContent = null;
+      
 
         // client configuration
         const string clientID = "894692614544-22gu7nau3ledrn8km38t27sbn957n06e.apps.googleusercontent.com";
@@ -250,8 +250,6 @@ namespace KBKA
                     if (i == 4)
                     {
                         userSub = word;
-                        output(userSub);
-
                     }
                     if (i == 12)
                     {
@@ -271,16 +269,19 @@ namespace KBKA
                     }
 
                 }
-                //if (SQLiteDA.LookForTable(userSub+"td") == false)
-               // {
-                    SQLiteDA.CreateTables(userSub);
-               // }
+
+
+                // Tu wrzuć enable wszystko  image i witaj jest zrobione wyżej w foreach
+             
+
+
+                SQLiteDA.CreateTables(userSub);
+             
                
                 Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "todo", chosendate.Content.ToString()).DefaultView;
                 Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "inprogress", chosendate.Content.ToString()).DefaultView;
                 Done.ItemsSource = SQLiteDA.GetData(userSub + "d", "done", chosendate.Content.ToString()).DefaultView;
-                // textBoxOutput.Text = textBoxOutput.Text + userName;
-                // output(userinfoResponseText);
+              
 
             }
 
@@ -293,7 +294,7 @@ namespace KBKA
         /// <param name="output">string to be appended</param>
         public void output(string output)
         {
-           // textBoxOutput.Text = textBoxOutput.Text + output + Environment.NewLine;
+            // textBoxOutput.Text = textBoxOutput.Text + output + Environment.NewLine;
             Console.WriteLine(output);
 
         }
@@ -361,79 +362,127 @@ namespace KBKA
                
             }
 
-            Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "todo", chosendate.Content.ToString()).DefaultView;
-            Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "inprogress", chosendate.Content.ToString()).DefaultView;
-            Done.ItemsSource = SQLiteDA.GetData(userSub + "d", "done", chosendate.Content.ToString()).DefaultView;
+            Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "ToDo", chosendate.Content.ToString()).DefaultView;
+            Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "InProgress", chosendate.Content.ToString()).DefaultView;
+            Done.ItemsSource = SQLiteDA.GetData(userSub + "d", "Done", chosendate.Content.ToString()).DefaultView;
 
 
         }
 
         private void AddToDo_Click(object sender, RoutedEventArgs e)
         {
-            SQLiteDA.Add(userSub + "td", "todo", chosendate.Content.ToString(), TexBoxToDo.Text.ToString());
-            Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "todo", chosendate.Content.ToString()).DefaultView;
+            SQLiteDA.Add(userSub + "td", "ToDo", chosendate.Content.ToString(), TexBoxToDo.Text.ToString(),ToDoNo.Text.ToString());
+            Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "ToDo", chosendate.Content.ToString()).DefaultView;
         }
 
         private void AddInProgress_Click(object sender, RoutedEventArgs e)
         {
-            SQLiteDA.Add(userSub + "ip", "inprogress", chosendate.Content.ToString(), TextBoxInProgress.Text.ToString());
-            Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "inprogress", chosendate.Content.ToString()).DefaultView;
+
+            SQLiteDA.Add(userSub + "ip", "InProgress", chosendate.Content.ToString(), TextBoxInProgress.Text.ToString(), InProgressNo.Text.ToString());
+            Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "InProgress", chosendate.Content.ToString()).DefaultView;
         }
 
         private void AddDone_Click(object sender, RoutedEventArgs e)
         {
-            SQLiteDA.Add(userSub + "d", "done", chosendate.Content.ToString(), TextBoxDone.Text.ToString());
-            Done.ItemsSource = SQLiteDA.GetData(userSub + "d", "done", chosendate.Content.ToString()).DefaultView;
+            SQLiteDA.Add(userSub + "d", "Done", chosendate.Content.ToString(), TextBoxDone.Text.ToString(), DoneNo.Text.ToString());
+            Done.ItemsSource = SQLiteDA.GetData(userSub + "d", "Done", chosendate.Content.ToString()).DefaultView;
         }
 
         private void EditToDo_Click(object sender, RoutedEventArgs e)
         {
-            SQLiteDA.Edit(userSub + "td", "todo", chosendate.Content.ToString(), TexBoxToDo.Text.ToString(),cellContent);
-            Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "todo", chosendate.Content.ToString()).DefaultView;
+            if (ToDoNo.Text == "")
+            {
+                MessageBox.Show("Looks like something has gone wrong." + "\n" + "Be sure that entered data is correct");
+            }
+            else { 
+            SQLiteDA.Edit(userSub + "td", "ToDo", chosendate.Content.ToString(), TexBoxToDo.Text.ToString(),ToDoNo.Text.ToString());
+            Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "ToDo", chosendate.Content.ToString()).DefaultView;
+            }
         }
 
         private void EditInProgress_Click(object sender, RoutedEventArgs e)
         {
-            SQLiteDA.Edit(userSub + "ip", "inprogress", chosendate.Content.ToString(), TextBoxInProgress.Text.ToString(),cellContent);
-            Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "inprogress", chosendate.Content.ToString()).DefaultView;
+            if (InProgressNo.Text == "")
+            {
+                MessageBox.Show("Looks like something has gone wrong." + "\n" + "Be sure that entered data is correct");
+            }
+            else
+            {
+                SQLiteDA.Edit(userSub + "ip", "InProgress", chosendate.Content.ToString(), TextBoxInProgress.Text.ToString(), InProgressNo.Text.ToString());
+                Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "InProgress", chosendate.Content.ToString()).DefaultView;
+            }
         }
 
         private void EditDone_Click(object sender, RoutedEventArgs e)
         {
-            SQLiteDA.Edit(userSub + "d", "done", chosendate.Content.ToString(), TextBoxDone.Text.ToString(),cellContent);
-            Done.ItemsSource = SQLiteDA.GetData(userSub + "d", "done", chosendate.Content.ToString()).DefaultView;
-        }
-
-        private void Todo_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-        {
-            Todo.BeginEdit();
-           // DataGridCellInfo cell = Todo.SelectedCells[0];
-            //var content = cell.Column.GetCellContent(cell.Item);
-            //int helper = content.ToString().Length;
-            if (Todo.SelectedCells.Count == 1)
+            if (DoneNo.Text == "")
             {
-                var selectedColumnHeader =
-                    Todo.Items.re
-                TextBoxDone.Text = selectedColumnHeader;
+                MessageBox.Show("Looks like something has gone wrong." + "\n" + "Be sure that entered data is correct");
             }
-
-            //if (helper >=33)
-            //{
-            //    // TextBoxDone.Text = content.ToString().Substring(33);
-
-            //    TextBoxDone.Text = e.AddedCells[0].IsValid
-
-            //    //TextBoxDone.Text = e.AddedCells[0].Item.ToString();
-            //    cellContent = content.ToString().Substring(33);
-            //}
-
-
+            else
+            {
+                SQLiteDA.Edit(userSub + "d", "Done", chosendate.Content.ToString(), TextBoxDone.Text.ToString(), DoneNo.Text.ToString());
+                Done.ItemsSource = SQLiteDA.GetData(userSub + "d", "Done", chosendate.Content.ToString()).DefaultView;
+            }
         }
+ 
 
         private void DeleteToDo_Click(object sender, RoutedEventArgs e)
         {
-            SQLiteDA.Delete(userSub + "td", "todo", chosendate.Content.ToString(),cellContent);
-            Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "todo", chosendate.Content.ToString()).DefaultView;
+            if (ToDoNo.Text == "")
+            {
+                MessageBox.Show("Looks like something has gone wrong." + "\n" + "Be sure that entered data is correct");
+            }
+            else
+            {
+                SQLiteDA.Delete(userSub + "td", chosendate.Content.ToString(), ToDoNo.Text.ToString());
+                Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "ToDo", chosendate.Content.ToString()).DefaultView;
+            }
+        }
+
+
+        private void DeleteInProgress_Click(object sender, RoutedEventArgs e)
+        {
+            if (InProgressNo.Text == "")
+            {
+                MessageBox.Show("Looks like something has gone wrong." + "\n" + "Be sure that entered data is correct");
+            }
+            else
+            {
+                SQLiteDA.Delete(userSub + "ip", chosendate.Content.ToString(), InProgressNo.Text.ToString());
+                Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "InProgress", chosendate.Content.ToString()).DefaultView;
+            }
+        }
+
+        private void DeleteDone_Click(object sender, RoutedEventArgs e)
+        {
+            if (DoneNo.Text == "")
+            {
+                MessageBox.Show("Looks like something has gone wrong." + "\n" + "Be sure that entered data is correct");
+            }
+            else
+            {
+                SQLiteDA.Delete(userSub + "d", chosendate.Content.ToString(), DoneNo.Text.ToString());
+                Done.ItemsSource = SQLiteDA.GetData(userSub + "d", "Done", chosendate.Content.ToString()).DefaultView;
+            }
+        }
+
+        private void ToDoNo_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void InProgressNo_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void DoneNo_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
     }
 
