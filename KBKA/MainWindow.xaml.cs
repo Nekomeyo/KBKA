@@ -32,6 +32,7 @@ using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.Data;
 using System.Text.RegularExpressions;
+using System.Windows.Input;
 
 namespace KBKA
 {
@@ -56,15 +57,32 @@ namespace KBKA
         public MainWindow()
         {
             InitializeComponent();
-           // TexboxToDo.Text= SQLiteDA.ReadData("todo");
-           //Todo.ItemsSource = SQLiteDA.LoadData("todo");
-           // string date = DateTime.Now.ToShortDateString();
-           // Todo.ItemsSource = SQLiteDA.GetData(userSub+"td","todo",date).DefaultView;
-           //  textBoxOutput.DisplayMemberPath = "event";
-           // //output(DateTime.Now.ToShortDateString());
             chosendate.Content = DateTime.Now.ToShortDateString();
           
 
+        }
+       
+        public void ActivateInterface()
+        {
+            AddToDoo.IsEnabled = true;
+            EditToDo.IsEnabled = true;
+            DeleteToDo.IsEnabled = true;
+            TexBoxToDo.IsEnabled = true;
+            ToDoNo.IsEnabled = true;
+            Todo.IsEnabled = true;
+            AddInProgress.IsEnabled = true;
+            EditInProgress.IsEnabled = true;
+            DeleteInProgress.IsEnabled = true;
+            TextBoxInProgress.IsEnabled = true;
+            InProgressNo.IsEnabled = true;
+            Inprogress.IsEnabled = true;
+            AddDone.IsEnabled = true;
+            EditDone.IsEnabled = true;
+            DeleteDone.IsEnabled = true;
+            TextBoxDone.IsEnabled = true;
+            DoneNo.IsEnabled = true;
+            Done.IsEnabled = true;
+            Calendar.IsEnabled = true;
         }
 
 
@@ -77,7 +95,7 @@ namespace KBKA
             listener.Stop();
             return port;
         }
-
+        
         private async void LogInbutton_Click(object sender, RoutedEventArgs e)
         {
             // Generates state and Proof Key for Code Exchange values.
@@ -116,7 +134,7 @@ namespace KBKA
 
             // Sends an HTTP response to the browser.
             var response = context.Response;
-            string responseString = string.Format("<html><head><meta http-equiv='refresh' content='10;url=https://google.com' charset='utf-8 '></head><body> <div style='text-align:center'>Pomyślnie zalogowano.<br> Powróć do aplikacji </div></body></html>");
+            string responseString = string.Format("<html><head><meta http-equiv='refresh' content='10;url=https://google.com' charset='utf-8 '></head><body> <div style='text-align:center'><img src='https://i.imgur.com/d3jNKUj.png'> <br>Logged in succesfully.<br> Get back to application </div></body></html>");
             var buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
             response.ContentLength64 = buffer.Length;
             var responseOutput = response.OutputStream;
@@ -265,7 +283,11 @@ namespace KBKA
                         bitmap.BeginInit();
                         bitmap.UriSource = new Uri(word, UriKind.Absolute);
                         bitmap.EndInit();
-                        avatar.Source = bitmap;
+                        avatar.ImageSource = bitmap;
+                        ActivateInterface();
+                        Instructions.Text = "If you want to operate with tasks you have to use buttons bellow textboxes: “Add”, “Edit” and “Delete”. As it goes “Add” button let’s you to add task to table of your choose, if you want to edit content of the task input correct number in text box labeled “No.” and write correction to textbox and click “Edit”. If you want to delete content of table input correct number in text box labeled “No.” and click delete, it will disappear.";
+
+
                     }
 
                 }
