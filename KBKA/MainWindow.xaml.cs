@@ -525,7 +525,7 @@ namespace KBKA
         }
 
         /// <summary>
-        /// Blocks entering any other values than ints into every "No" TextBox
+        /// Blocks entering any other values than numbers into every "No" TextBox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
