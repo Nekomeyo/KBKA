@@ -61,7 +61,9 @@ namespace KBKA
           
 
         }
-       
+       /// <summary>
+       /// Turns on interface
+       /// </summary>
         public void ActivateInterface()
         {
             AddToDoo.IsEnabled = true;
@@ -87,6 +89,10 @@ namespace KBKA
 
 
         // ref http://stackoverflow.com/a/3978040
+        /// <summary>
+        /// Finds "random" unused port which is used for loopback
+        /// </summary>
+        /// <returns></returns>
         public static int GetRandomUnusedPort()
         {
             var listener = new TcpListener(IPAddress.Loopback, 0);
@@ -95,7 +101,11 @@ namespace KBKA
             listener.Stop();
             return port;
         }
-        
+        /// <summary>
+        /// Initializes log in operation after triggering button with clicking it(<param name="sender"></param>)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void LogInbutton_Click(object sender, RoutedEventArgs e)
         {
             // Generates state and Proof Key for Code Exchange values.
@@ -176,7 +186,12 @@ namespace KBKA
 
         
         }
-
+        /// <summary>
+        /// Exchanges code gained in log in operation made in LogInbutton_Click function for tokens needed in gaining information from Google servers
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="code_verifier"></param>
+        /// <param name="redirectURI"></param>
         async void performCodeExchange(string code, string code_verifier, string redirectURI)
         {
             //output("Exchanging code for tokens...");
@@ -238,7 +253,10 @@ namespace KBKA
             }
         }
 
-
+        /// <summary>
+        /// Uses (<param name="access_token"></param>)  gained in performCodeExchange function to acces user infromation needed to extract his Avatar, Name, and also to get id needed in database
+        /// </summary>
+        /// <param name="access_token"></param>
         async void userinfoCall(string access_token)
         {   
             // sends the request
@@ -293,10 +311,12 @@ namespace KBKA
                 }
 
 
-                // Tu wrzuć enable wszystko  image i witaj jest zrobione wyżej w foreach
+                
              
 
+              
 
+                
                 SQLiteDA.CreateTables(userSub);
              
                
@@ -369,8 +389,7 @@ namespace KBKA
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Calendar_SelectedDatesChanged(object sender,
-           SelectionChangedEventArgs e)
+        private void Calendar_SelectedDatesChanged(object sender,SelectionChangedEventArgs e)
         {
             // ... Get reference.
             var calendar = sender as Calendar;
@@ -390,26 +409,37 @@ namespace KBKA
 
 
         }
-
+        /// <summary>
+        /// Adds inserted by user text to database
+        /// Every Add button works the same with slight diffrence of proper tabels for each button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddToDo_Click(object sender, RoutedEventArgs e)
         {
             SQLiteDA.Add(userSub + "td", "ToDo", chosendate.Content.ToString(), TexBoxToDo.Text.ToString(),ToDoNo.Text.ToString());
             Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "ToDo", chosendate.Content.ToString()).DefaultView;
         }
-
+      
         private void AddInProgress_Click(object sender, RoutedEventArgs e)
         {
 
             SQLiteDA.Add(userSub + "ip", "InProgress", chosendate.Content.ToString(), TextBoxInProgress.Text.ToString(), InProgressNo.Text.ToString());
             Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "InProgress", chosendate.Content.ToString()).DefaultView;
         }
-
+        
         private void AddDone_Click(object sender, RoutedEventArgs e)
         {
             SQLiteDA.Add(userSub + "d", "Done", chosendate.Content.ToString(), TextBoxDone.Text.ToString(), DoneNo.Text.ToString());
             Done.ItemsSource = SQLiteDA.GetData(userSub + "d", "Done", chosendate.Content.ToString()).DefaultView;
         }
 
+        /// <summary>
+        /// Edits existing in database text, chooses row based on entered by user number
+        /// Every Edit button works the same with slight diffrence of proper tabels for each button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditToDo_Click(object sender, RoutedEventArgs e)
         {
             if (ToDoNo.Text == "")
@@ -421,7 +451,7 @@ namespace KBKA
             Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "ToDo", chosendate.Content.ToString()).DefaultView;
             }
         }
-
+        
         private void EditInProgress_Click(object sender, RoutedEventArgs e)
         {
             if (InProgressNo.Text == "")
@@ -434,7 +464,7 @@ namespace KBKA
                 Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "InProgress", chosendate.Content.ToString()).DefaultView;
             }
         }
-
+        
         private void EditDone_Click(object sender, RoutedEventArgs e)
         {
             if (DoneNo.Text == "")
@@ -447,8 +477,13 @@ namespace KBKA
                 Done.ItemsSource = SQLiteDA.GetData(userSub + "d", "Done", chosendate.Content.ToString()).DefaultView;
             }
         }
- 
 
+        /// <summary>
+        /// Deletes existing in database text, chooses row based on entered by user number
+        /// Every Delete button works the same with slight diffrence of proper tabels for each button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DeleteToDo_Click(object sender, RoutedEventArgs e)
         {
             if (ToDoNo.Text == "")
@@ -489,6 +524,11 @@ namespace KBKA
             }
         }
 
+        /// <summary>
+        /// Blocks entering any other values than ints into every "No" TextBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ToDoNo_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");

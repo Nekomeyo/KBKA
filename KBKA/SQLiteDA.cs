@@ -22,7 +22,10 @@ namespace KBKA
         private static DataTable DT = new DataTable();
 
 
-        //set connection and open the database
+        /// <summary>
+        /// Sets connection and opens the database
+        /// </summary>
+        /// <returns></returns>
         public static SQLiteConnection OpenConnection()
         {
             sqlConn = new SQLiteConnection("Data Source= data.db;Version=3;");
@@ -37,8 +40,11 @@ namespace KBKA
             return sqlConn;
         }
 
-        //set function to execute the query
 
+        /// <summary>
+        /// Set function to execute the query
+        /// </summary>
+        /// <param name="querryText"></param>
         public static void ExecuteQuerry(string querryText)
         {
             OpenConnection();
@@ -47,8 +53,11 @@ namespace KBKA
             sqlCmd.ExecuteNonQuery();
             
         }
-      
-        // create user's tables if not exists
+
+        /// <summary>
+        /// Creates user's tables if they do not exist
+        /// </summary>
+        /// <param name="usersub"></param>
         public static void CreateTables(string usersub)
         {
             try
@@ -77,8 +86,13 @@ namespace KBKA
 
         }
 
-        //set function to show data in datagrids
-
+        /// <summary>
+        /// Set function to show data in datagrids
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="column"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
         public static DataTable GetData(string table, string column, string date)
         {
             try
@@ -99,7 +113,14 @@ namespace KBKA
             }
             return DT;
         }
-
+        /// <summary>
+        /// Adds row with content to table 
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="column"></param>
+        /// <param name="date"></param>
+        /// <param name="tbContent"></param>
+        /// <param name="noContent"></param>
         public static void Add(string table, string column, string date, string tbContent, string noContent)
         {
             try {
@@ -115,7 +136,14 @@ namespace KBKA
                MessageBox.Show("Looks like something has gone wrong."+"\n"+"Be sure that entered data is correct");
             }
         } 
-
+        /// <summary>
+        /// Used to edit existing rows in table and alter their content
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="column"></param>
+        /// <param name="date"></param>
+        /// <param name="tbContent"></param>
+        /// <param name="noContent"></param>
         public static void Edit(string table, string column, string date, string tbContent,string noContent)
         {
             try {
@@ -131,6 +159,12 @@ namespace KBKA
                 MessageBox.Show("Looks like something has gone wrong." + "\n" + "Be sure that entered data is correct");
             }
         }
+        /// <summary>
+        /// Used to delate rows with their content
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="date"></param>
+        /// <param name="noContent"></param>
         public static void Delete(string table, string date, string noContent)
         {
             try { 
