@@ -9,7 +9,7 @@ using System.Windows;
 namespace KBKA
 {
     /// <summary>
-    /// Logic of class App
+    /// Logika interakcji dla klasy App.xaml
     /// </summary>
     public partial class App : Application
     {

@@ -37,7 +37,7 @@ using System.Windows.Input;
 namespace KBKA
 {
     /// <summary>
-    /// Logic of class MainWindow
+    /// Logika interakcji dla klasy MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -91,7 +91,8 @@ namespace KBKA
         // ref http://stackoverflow.com/a/3978040
         /// <summary>
         /// Finds "random" unused port which is used for loopback
-        /// </summary>  
+        /// </summary>
+        /// <returns></returns>
         public static int GetRandomUnusedPort()
         {
             var listener = new TcpListener(IPAddress.Loopback, 0);
@@ -101,7 +102,7 @@ namespace KBKA
             return port;
         }
         /// <summary>
-        /// Initializes log in operation after triggering button with clicking it
+        /// Initializes log in operation after triggering button with clicking it(<param name="sender"></param>)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -253,7 +254,7 @@ namespace KBKA
         }
 
         /// <summary>
-        /// Uses ("access_token") gained in performCodeExchange function to acces user infromation needed to extract his Avatar, Name, and also to get id needed in database
+        /// Uses (<param name="access_token"></param>)  gained in performCodeExchange function to acces user infromation needed to extract his Avatar, Name, and also to get id needed in database
         /// </summary>
         /// <param name="access_token"></param>
         async void userinfoCall(string access_token)
@@ -344,6 +345,7 @@ namespace KBKA
         /// Returns URI-safe data with a given input length.
         /// </summary>
         /// <param name="length">Input length (nb. output will be longer)</param>
+        /// <returns></returns>
         public static string randomDataBase64url(uint length)
         {
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
@@ -356,6 +358,7 @@ namespace KBKA
         /// Returns the SHA256 hash of the input string.
         /// </summary>
         /// <param name="inputStirng"></param>
+        /// <returns></returns>
         public static byte[] sha256(string inputStirng)
         {
             byte[] bytes = Encoding.ASCII.GetBytes(inputStirng);
@@ -367,6 +370,7 @@ namespace KBKA
         /// Base64url no-padding encodes the given input buffer.
         /// </summary>
         /// <param name="buffer"></param>
+        /// <returns></returns>
         public static string base64urlencodeNoPadding(byte[] buffer)
         {
             string base64 = Convert.ToBase64String(buffer);
