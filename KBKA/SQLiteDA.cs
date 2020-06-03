@@ -130,6 +130,7 @@ namespace KBKA
             }
             return DT;
         }
+
         /// <summary>
         /// Adds row with content to table 
         /// </summary>
