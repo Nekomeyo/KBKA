@@ -12,7 +12,9 @@ using System.Threading.Tasks;
 using System.Windows;
 
 namespace KBKA
-{
+{/// <summary>
+/// Logic of interaction with Database
+/// </summary>
     public static class SQLiteDA
     {
         private static SQLiteConnection sqlConn;
@@ -25,7 +27,9 @@ namespace KBKA
         /// <summary>
         /// Sets connection and opens the database
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// Acces to database
+        /// </returns>
         public static SQLiteConnection OpenConnection()
         {
             sqlConn = new SQLiteConnection("Data Source= data.db;Version=3;");
@@ -92,7 +96,9 @@ namespace KBKA
         /// <param name="table"></param>
         /// <param name="column"></param>
         /// <param name="date"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// Data from database shown in datagrids
+        /// </returns>
         public static DataTable GetData(string table, string column, string date)
         {
             try
