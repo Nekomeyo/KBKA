@@ -12,16 +12,17 @@ using System.Threading.Tasks;
 using System.Windows;
 
 namespace KBKA
-{/// <summary>
-/// Logic of interaction with Database
-/// </summary>
+{
+
+    /// <summary>
+    /// Logic of interaction with Database
+    /// </summary>
     public static class SQLiteDA
     {
-        private static SQLiteConnection sqlConn;
-        private static SQLiteCommand sqlCmd;
-        private static SQLiteDataAdapter DA;
-        private static DataSet DS = new DataSet();
-        private static DataTable DT = new DataTable();
+        private static SQLiteConnection sqlConn;/**<  Used to establish connection with database */
+        private static SQLiteCommand sqlCmd;/**<  Used to interact with database */
+        private static SQLiteDataAdapter DA;/**<  Adapter used to process recived from database data to usable in "C#" form */
+        private static DataTable DT = new DataTable();/**<  Converts recived by DA data to table  */
 
 
         /// <summary>
@@ -48,7 +49,9 @@ namespace KBKA
         /// <summary>
         /// Set function to execute the query
         /// </summary>
-        /// <param name="querryText"></param>
+        /// <param name="querryText">
+        /// Content of SQL querry
+        /// </param>
         public static void ExecuteQuerry(string querryText)
         {
             OpenConnection();
@@ -61,7 +64,9 @@ namespace KBKA
         /// <summary>
         /// Creates user's tables if they do not exist
         /// </summary>
-        /// <param name="usersub"></param>
+        /// <param name="usersub">
+        /// Used as ID (names) for tables in database
+        /// </param>
         public static void CreateTables(string usersub)
         {
             try
@@ -93,9 +98,15 @@ namespace KBKA
         /// <summary>
         /// Set function to show data in datagrids
         /// </summary>
-        /// <param name="table"></param>
-        /// <param name="column"></param>
-        /// <param name="date"></param>
+        /// <param name="table">
+        /// Name of table
+        /// </param>
+        /// <param name="column">
+        ///  Name of column
+        /// </param>
+        /// <param name="date">
+        /// Choosen date
+        /// </param>
         /// <returns>
         /// Data from database shown in datagrids
         /// </returns>
@@ -122,11 +133,21 @@ namespace KBKA
         /// <summary>
         /// Adds row with content to table 
         /// </summary>
-        /// <param name="table"></param>
-        /// <param name="column"></param>
-        /// <param name="date"></param>
-        /// <param name="tbContent"></param>
-        /// <param name="noContent"></param>
+        /// <param name="table">
+        /// Name of table
+        /// </param>
+        /// <param name="column">
+        ///  Name of column
+        /// </param>
+        /// <param name="date">
+        /// Choosen date
+        /// </param>
+        /// <param name="tbContent">
+        /// Text inserted into row in db
+        /// </param>
+        /// <param name="noContent">
+        /// Number of inserted task
+        /// </param>
         public static void Add(string table, string column, string date, string tbContent, string noContent)
         {
             try {
@@ -141,15 +162,25 @@ namespace KBKA
             {
                MessageBox.Show("Looks like something has gone wrong."+"\n"+"Be sure that entered data is correct");
             }
-        } 
+        }
         /// <summary>
         /// Used to edit existing rows in table and alter their content
         /// </summary>
-        /// <param name="table"></param>
-        /// <param name="column"></param>
-        /// <param name="date"></param>
-        /// <param name="tbContent"></param>
-        /// <param name="noContent"></param>
+        /// <param name="table">
+        /// Name of table
+        /// </param>
+        /// <param name="column">
+        ///  Name of column
+        /// </param>
+        /// <param name="date">
+        /// Choosen date
+        /// </param>
+        /// <param name="tbContent">
+        /// Used to edit text of existing row in db
+        /// </param>
+        /// <param name="noContent">
+        /// Number of edited task
+        /// </param>
         public static void Edit(string table, string column, string date, string tbContent,string noContent)
         {
             try {
@@ -168,9 +199,15 @@ namespace KBKA
         /// <summary>
         /// Used to delate rows with their content
         /// </summary>
-        /// <param name="table"></param>
-        /// <param name="date"></param>
-        /// <param name="noContent"></param>
+        /// <param name="table">
+        /// Name of table
+        /// </param>
+        /// <param name="date">
+        /// Choosen date
+        /// </param>
+        /// <param name="noContent">
+        /// Number of deleted task
+        /// </param>
         public static void Delete(string table, string date, string noContent)
         {
             try { 

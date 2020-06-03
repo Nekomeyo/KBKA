@@ -41,18 +41,19 @@ namespace KBKA
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string userName = null;
-        public string userSub = null;
-      
+        
+        public string userName = null; /**<  Extracted from userinfoResponseText and used to welcome loged in user  */
+        public string userSub = null; /**<  Extracted from userinfoResponseText and used as userID in database */
+
 
         // client configuration
-        const string clientID = "894692614544-22gu7nau3ledrn8km38t27sbn957n06e.apps.googleusercontent.com";
-        const string clientSecret = "BYsABFPcHy_uiT9DWUwa0LqZ";
+        const string clientID = "894692614544-22gu7nau3ledrn8km38t27sbn957n06e.apps.googleusercontent.com"; /**<  Public identifier for app recived from google. Allows usage of google services for loging in */
+        const string clientSecret = "BYsABFPcHy_uiT9DWUwa0LqZ"; /**<  Secret known only to the application and the authorization server. */
         // scoopes
-        const string authorizationEndpoint = "https://accounts.google.com/o/oauth2/v2/auth";
-        const string tokenEndpoint = "https://www.googleapis.com/oauth2/v4/token";
-        const string userInfoEndpoint = "https://www.googleapis.com/oauth2/v3/userinfo";
-        
+        const string authorizationEndpoint = "https://accounts.google.com/o/oauth2/v2/auth"; /**<  Scope allowing to use Google Auth */
+        const string tokenEndpoint = "https://www.googleapis.com/oauth2/v4/token"; /**<  Scope which confirms that user is logged in  */
+        const string userInfoEndpoint = "https://www.googleapis.com/oauth2/v3/userinfo"; /**<  Scope allowing to recive User Info from Google services after succesfull log in */
+
 
         public MainWindow()
         {
@@ -416,14 +417,26 @@ namespace KBKA
             SQLiteDA.Add(userSub + "td", "ToDo", chosendate.Content.ToString(), TexBoxToDo.Text.ToString(),ToDoNo.Text.ToString());
             Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "ToDo", chosendate.Content.ToString()).DefaultView;
         }
-      
+
+        /// <summary>
+        /// Adds inserted by user text to database
+        /// Every Add button works the same with slight diffrence of proper tabels for each button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddInProgress_Click(object sender, RoutedEventArgs e)
         {
 
             SQLiteDA.Add(userSub + "ip", "InProgress", chosendate.Content.ToString(), TextBoxInProgress.Text.ToString(), InProgressNo.Text.ToString());
             Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "InProgress", chosendate.Content.ToString()).DefaultView;
         }
-        
+
+        /// <summary>
+        /// Adds inserted by user text to database
+        /// Every Add button works the same with slight diffrence of proper tabels for each button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddDone_Click(object sender, RoutedEventArgs e)
         {
             SQLiteDA.Add(userSub + "d", "Done", chosendate.Content.ToString(), TextBoxDone.Text.ToString(), DoneNo.Text.ToString());
@@ -447,7 +460,13 @@ namespace KBKA
             Todo.ItemsSource = SQLiteDA.GetData(userSub + "td", "ToDo", chosendate.Content.ToString()).DefaultView;
             }
         }
-        
+
+        /// <summary>
+        /// Edits existing in database text, chooses row based on entered by user number
+        /// Every Edit button works the same with slight diffrence of proper tabels for each button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditInProgress_Click(object sender, RoutedEventArgs e)
         {
             if (InProgressNo.Text == "")
@@ -460,7 +479,13 @@ namespace KBKA
                 Inprogress.ItemsSource = SQLiteDA.GetData(userSub + "ip", "InProgress", chosendate.Content.ToString()).DefaultView;
             }
         }
-        
+
+        /// <summary>
+        /// Edits existing in database text, chooses row based on entered by user number
+        /// Every Edit button works the same with slight diffrence of proper tabels for each button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditDone_Click(object sender, RoutedEventArgs e)
         {
             if (DoneNo.Text == "")
@@ -475,7 +500,7 @@ namespace KBKA
         }
 
         /// <summary>
-        /// Deletes existing in database text, chooses row based on entered by user number
+        /// Deletes existing in database row based on entered by user number
         /// Every Delete button works the same with slight diffrence of proper tabels for each button
         /// </summary>
         /// <param name="sender"></param>
@@ -493,7 +518,12 @@ namespace KBKA
             }
         }
 
-
+        /// <summary>
+        /// Deletes existing in database row based on entered by user number
+        /// Every Delete button works the same with slight diffrence of proper tabels for each button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DeleteInProgress_Click(object sender, RoutedEventArgs e)
         {
             if (InProgressNo.Text == "")
@@ -507,6 +537,12 @@ namespace KBKA
             }
         }
 
+        /// <summary>
+        /// Deletes existing in database row based on entered by user number
+        /// Every Delete button works the same with slight diffrence of proper tabels for each button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DeleteDone_Click(object sender, RoutedEventArgs e)
         {
             if (DoneNo.Text == "")
@@ -531,12 +567,22 @@ namespace KBKA
             e.Handled = regex.IsMatch(e.Text);
         }
 
+        /// <summary>
+        /// Blocks entering any other values than numbers into every "No" TextBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void InProgressNo_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
 
+        /// <summary>
+        /// Blocks entering any other values than numbers into every "No" TextBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DoneNo_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
